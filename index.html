@@ -5380,5 +5380,58 @@
             alert("คุณเลือกชนิดของคำ: " + selectedTypes.join(", "));
         }
     </script>
+    <script>
+    // ฟังก์ชันสำหรับการสุ่มคำ
+    function generateRandomWord() {
+        if (!currentLanguage || !currentLanguage.phonology) {
+            console.error("Phonology data not available for the current language.");
+            return '';
+        }
+
+        const { consonants, vowels, syllableStructures } = currentLanguage.phonology;
+
+        if (!consonants.length || !vowels.length || !syllableStructures.length) {
+            console.error("Phonology data is incomplete.");
+            return '';
+        }
+
+        // เลือกโครงสร้างพยางค์แบบสุ่ม
+        const syllableStructure = syllableStructures[Math.floor(Math.random() * syllableStructures.length)];
+
+        // สร้างคำจากโครงสร้างพยางค์
+        let word = '';
+        for (const char of syllableStructure) {
+            if (char === 'C') {
+                word += consonants[Math.floor(Math.random() * consonants.length)];
+            } else if (char === 'V') {
+                word += vowels[Math.floor(Math.random() * vowels.length)];
+            }
+        }
+
+        return word;
+    }
+
+    // ตัวอย่างการใช้งานฟังก์ชัน generateRandomWord
+    function handleGenerateWordClick() {
+        const randomWord = generateRandomWord();
+        if (randomWord) {
+            alert(`คำที่สุ่มได้: ${randomWord}`);
+        }
+    }
+
+    // เพิ่มปุ่มสำหรับสุ่มคำในหน้า UI
+    document.addEventListener('DOMContentLoaded', () => {
+        const generateWordButton = document.createElement('button');
+        generateWordButton.textContent = 'สุ่มคำ';
+        generateWordButton.className = 'btn-primary py-2 px-4 rounded-md font-semibold';
+        generateWordButton.addEventListener('click', handleGenerateWordClick);
+
+        // แทรกปุ่มในหน้า UI
+        const mainContent = document.getElementById('mainContent');
+        if (mainContent) {
+            mainContent.appendChild(generateWordButton);
+        }
+    });
+</script>
 </body>
 </html>
